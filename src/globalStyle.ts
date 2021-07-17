@@ -75,6 +75,7 @@ const GlobalStyle = createGlobalStyle`
 
     button {
         padding: 3px 39px 0 40px;
+        background: #fcfcfc;
         border: solid 1px #d6d6d6;
         font-family: Roboto;
         font-size: 16px;
@@ -85,13 +86,13 @@ const GlobalStyle = createGlobalStyle`
         letter-spacing: normal;
         text-align: center;
         color: #6a6a6a;
+        will-change: opacity;
         transition: 0.15s ease-in-out;
     }
 
     button:hover {
         cursor: pointer;
-        border: solid 1px #1797ff;
-        color: #1797ff;
+        opacity: 0.8;
     }
 `;
 
