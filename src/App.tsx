@@ -157,12 +157,12 @@ function App() {
     });
     const useStateWithLocalStorage = (localStorageKey) => {
         const [value, setValue] = useState(
-            localStorage.getItem(localStorageKey) || ""
+            JSON.parse(localStorage.getItem(localStorageKey) || "")
         );
 
         useEffect(() => {
             localStorage.setItem(localStorageKey, JSON.stringify(value));
-        }, [value]);
+        }, [value, localStorageKey]);
 
         return [value, setValue];
     };
@@ -217,18 +217,7 @@ function App() {
             });
     }, []);
 
-    useEffect(() => {
-        fetch(
-            "https://hn.algolia.com/api/v1/search_by_date?query=reactjs&page=0"
-        )
-            .then((response) => response.json())
-            .then((json) => {
-                setPosts(json);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, [favorites]);
+    useEffect(() => {}, [favorites]);
 
     return (
         <>
