@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 
-import GlobalStyle from "./globalStyle";
+import GlobalStyle, { Device } from "./globalStyle";
+import All from "./All";
 import Row from "./Row";
 
 const Main = styled.div`
@@ -15,18 +16,22 @@ const Header = styled.div`
     top: 0;
     z-index: 100;
     width: 100%;
-    padding: 2.75rem 9.5rem;
+    padding: 2.75rem 4.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
     background-image: linear-gradient(to bottom, #ececec -32%, #ffffff 124%);
     font-family: Baskerville;
     font-size: 28px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1;
-    letter-spacing: normal;
     color: #3b3b3b;
+
+    @media ${Device.laptop} {
+        padding: 2.75rem 7.5rem;
+    }
+
+    @media ${Device.desktop} {
+        padding: 2.75rem 9.5rem;
+    }
 `;
 
 const Views = styled.div`
@@ -61,33 +66,26 @@ const Button = styled.button<Props>`
 `;
 
 const Rows = styled.div`
+    position: relative;
     width: 100%;
-    padding: 4rem 9.5rem;
+    padding: 4.25rem 4.5rem;
     display: grid;
     align-content: start;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
+    @media ${Device.laptop} {
+        grid-template-columns: 1fr 1fr;
+        padding: 4.25rem 7.5rem;
+    }
+
+    @media ${Device.desktop} {
+        padding: 4.25rem 9.5rem;
+    }
 `;
 
 function App() {
-    const [page, setPage] = useState(0);
     const [favs, setFavs] = useState(false);
-    const [posts, setPosts] = useState([
-        {
-            created_at: "",
-            author: "",
-            story_id: 0,
-            story_title: "",
-            story_url: "",
-        },
-        {
-            created_at: "",
-            author: "",
-            story_id: 0,
-            story_title: "",
-            story_url: "",
-        },
-    ]);
     const [favorites, setFavorites] = useState(
         JSON.parse(
             localStorage.getItem("favorites") ||
@@ -95,7 +93,7 @@ function App() {
                     {
                         created_at: "",
                         author: "",
-                        story_id: 1,
+                        objectID: 1,
                         story_title: "",
                         story_url: "",
                     },
@@ -103,36 +101,20 @@ function App() {
         )
     );
 
-    const loadMore = () => {
-        fetch(
-            `https://hn.algolia.com/api/v1/search_by_date?query=reactjs&page=${
-                page + 1
-            }`
-        )
-            .then((response) => response.json())
-            .then((json) => {
-                setPosts((posts) => [...posts, ...json.hits]);
-                setPage((page) => page + 1);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
-
     const handleFavorite = (post: {
         created_at: string;
         author: string;
-        story_id: number;
+        objectID: number;
         story_title: string;
         story_url: string;
     }) => {
         favorites.some(
-            (item: { story_id: number }) => item.story_id === post.story_id
+            (item: { objectID: number }) => item.objectID === post.objectID
         )
             ? setFavorites(
                   favorites.filter(
-                      (item: { story_id: number }) =>
-                          item.story_id !== post.story_id
+                      (item: { objectID: number }) =>
+                          item.objectID !== post.objectID
                   )
               )
             : setFavorites([...favorites, post]);
@@ -141,19 +123,6 @@ function App() {
     useEffect(() => {
         localStorage.setItem("favorites", JSON.stringify(favorites));
     }, [favorites]);
-
-    useEffect(() => {
-        fetch(
-            "https://hn.algolia.com/api/v1/search_by_date?query=reactjs&page=0"
-        )
-            .then((response) => response.json())
-            .then((json) => {
-                setPosts(json.hits);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
 
     return (
         <>
@@ -168,53 +137,31 @@ function App() {
                         My faves
                     </Button>
                 </Views>
-                {!favs ? (
-                    <Rows key={0}>
-                        {posts.map(
+                <Rows key={0}>
+                    {!favs ? (
+                        <All
+                            favorites={favorites}
+                            handleFavorite={handleFavorite}
+                        />
+                    ) : (
+                        favorites.map(
                             (post: {
                                 created_at: string;
                                 author: string;
-                                story_id: number;
+                                objectID: number;
                                 story_title: string;
                                 story_url: string;
                             }) => (
                                 <Row
-                                    key={post.story_id}
-                                    data={post}
-                                    favorite={
-                                        favorites.some(
-                                            (i: { story_id: number }) =>
-                                                i.story_id === post.story_id
-                                        )
-                                            ? true
-                                            : false
-                                    }
-                                    onClick={() => handleFavorite(post)}
-                                />
-                            )
-                        )}
-                        <button onClick={() => loadMore()}>more</button>
-                    </Rows>
-                ) : (
-                    <Rows key={1}>
-                        {favorites.map(
-                            (post: {
-                                created_at: string;
-                                author: string;
-                                story_id: number;
-                                story_title: string;
-                                story_url: string;
-                            }) => (
-                                <Row
-                                    key={post.story_id}
+                                    key={post.objectID}
                                     data={post}
                                     favorite={true}
                                     onClick={() => handleFavorite(post)}
                                 />
                             )
-                        )}
-                    </Rows>
-                )}
+                        )
+                    )}
+                </Rows>
             </Main>
         </>
     );

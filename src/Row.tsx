@@ -1,3 +1,4 @@
+import { ForwardedRef } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -53,10 +54,11 @@ const Fav = styled.div`
 `;
 
 type RowProps = {
+    ref?: ForwardedRef<HTMLDivElement> | null;
     data: {
         created_at: string;
         author: string;
-        story_id: number;
+        objectID: number;
         story_title: string;
         story_url: string;
     };
@@ -64,7 +66,7 @@ type RowProps = {
     onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-function Row({ data, favorite, onClick }: RowProps) {
+function Row({ ref, data, favorite, onClick }: RowProps) {
     const units: { unit: Intl.RelativeTimeFormatUnit; ms: number }[] = [
         { unit: "year", ms: 31536000000 },
         { unit: "month", ms: 2628000000 },
@@ -100,7 +102,7 @@ function Row({ data, favorite, onClick }: RowProps) {
                 data.author &&
                 data.story_title &&
                 data.story_url && (
-                    <Container>
+                    <Container ref={ref}>
                         <Box href={data.story_url} target="_blank">
                             <label>
                                 <img src="img/iconmonstr-time-2.svg" alt="" />

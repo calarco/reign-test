@@ -51,8 +51,6 @@ const GlobalStyle = createGlobalStyle`
     p {
         font-family: Roboto;
         font-size: 14px;
-        font-stretch: normal;
-        font-style: normal;
         line-height: 1.43;
         letter-spacing: 0.25px;
         color: #6b6b6b;
@@ -65,11 +63,6 @@ const GlobalStyle = createGlobalStyle`
     label {
         font-family: Roboto;
         font-size: 11px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #767676;
     }
 
@@ -80,10 +73,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: Roboto;
         font-size: 16px;
         font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
         line-height: 1.75;
-        letter-spacing: normal;
         text-align: center;
         color: #6a6a6a;
         will-change: opacity;
