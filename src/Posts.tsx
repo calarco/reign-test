@@ -5,43 +5,26 @@ import { Device } from "./globalStyle";
 import Row from "./Row";
 
 const Filter = styled.div`
-    position: absolute;
-    top: 0;
-    width: 100%;
-    padding: 0 4.5rem;
-
-    select {
-        min-width: 15rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: 4px;
-        border: solid 1px #2e2e2e;
-        background-color: #ffffff;
-        font-family: Roboto;
-        font-size: 14px;
-        line-height: 1.57;
-        color: #343434;
-    }
+    width: 90vw;
+    max-width: 40rem;
+    padding: 0.5rem 0;
 
     @media ${Device.laptop} {
-        padding: 0 7.5rem;
-    }
-
-    @media ${Device.desktop} {
-        padding: 0 9.5rem;
+        grid-column-end: span 2;
+        max-width: 70rem;
     }
 `;
 
 const Loading = styled.div`
-    grid-column-end: span 2;
     padding: 2rem 0;
-    font-family: Roboto;
-    font-size: 14px;
-    line-height: 1.57;
     text-align: center;
-    color: rgba(0, 0, 0, 0.65);
+
+    @media ${Device.laptop} {
+        grid-column-end: span 2;
+    }
 `;
 
-type AllProps = {
+type PostsProps = {
     favorites: [
         {
             created_at: string;
@@ -60,7 +43,7 @@ type AllProps = {
     }) => void;
 };
 
-function All({ favorites, handleFavorite }: AllProps) {
+function Posts({ favorites, handleFavorite }: PostsProps) {
     const [query, setQuery] = useState(
         localStorage.getItem("query") || "reactjs"
     );
@@ -183,4 +166,4 @@ function All({ favorites, handleFavorite }: AllProps) {
     );
 }
 
-export default All;
+export default Posts;

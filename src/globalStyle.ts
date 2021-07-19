@@ -41,6 +41,10 @@ const GlobalStyle = createGlobalStyle`
     body {
         background: #fcfcfc;
 
+        font-family: Roboto;
+        font-size: 14px;
+        line-height: 1.57;
+        color: rgba(0, 0, 0, 0.65);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
@@ -49,8 +53,6 @@ const GlobalStyle = createGlobalStyle`
     }
 
     p {
-        font-family: Roboto;
-        font-size: 14px;
         line-height: 1.43;
         letter-spacing: 0.25px;
         color: #6b6b6b;
@@ -61,16 +63,23 @@ const GlobalStyle = createGlobalStyle`
     }
 
     label {
-        font-family: Roboto;
         font-size: 11px;
         color: #767676;
+    }
+
+    select {
+        min-width: 15rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+        border: solid 1px #2e2e2e;
+        background-color: #ffffff;
+        color: #343434;
     }
 
     button {
         padding: 3px 39px 0 40px;
         background: #fcfcfc;
         border: solid 1px #d6d6d6;
-        font-family: Roboto;
         font-size: 16px;
         font-weight: 500;
         line-height: 1.75;
@@ -82,7 +91,6 @@ const GlobalStyle = createGlobalStyle`
 
     button:hover {
         cursor: pointer;
-        opacity: 0.8;
     }
 `;
 

@@ -1,11 +1,16 @@
 import { ForwardedRef } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
+import { Device } from "./globalStyle";
+
+const Container = styled.article`
     overflow: hidden;
+    min-height: 6.5rem;
+    max-width: 40rem;
     border-radius: 6px;
     border: solid 1px #979797;
     background-color: #ffffff;
+    text-align: left;
     display: grid;
     align-items: center;
     grid-template-columns: 1fr auto;
@@ -15,6 +20,10 @@ const Container = styled.div`
     &:hover {
         cursor: pointer;
         opacity: 0.8;
+    }
+
+    @media ${Device.laptop} {
+        max-width: 35rem;
     }
 `;
 

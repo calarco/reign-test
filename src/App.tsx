@@ -2,45 +2,53 @@ import { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 
 import GlobalStyle, { Device } from "./globalStyle";
-import All from "./All";
+import Posts from "./Posts";
 import Row from "./Row";
 
-const Main = styled.div`
+const Main = styled.main`
     width: 100vw;
     height: 100vh;
     overflow-y: scroll;
 `;
 
-const Header = styled.div`
+const Header = styled.nav`
     position: sticky;
     top: 0;
     z-index: 100;
     width: 100%;
-    padding: 2.75rem 4.5rem;
+    padding: 2.75rem 5vw;
     margin-bottom: 1.5rem;
     box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
     background-image: linear-gradient(to bottom, #ececec -32%, #ffffff 124%);
-    font-family: Baskerville;
-    font-size: 28px;
-    line-height: 1;
-    color: #3b3b3b;
+    text-align: center;
 
-    @media ${Device.laptop} {
-        padding: 2.75rem 7.5rem;
-    }
+    h1 {
+        text-align: left;
+        width: 100%;
+        max-width: 40rem;
+        font-family: Baskerville;
+        font-size: 28px;
+        font-weight: normal;
+        line-height: 1;
+        color: #3b3b3b;
 
-    @media ${Device.desktop} {
-        padding: 2.75rem 9.5rem;
+        @media ${Device.laptop} {
+            max-width: 72rem;
+        }
     }
 `;
 
-const Views = styled.div`
+const Switcher = styled.div`
     position: sticky;
-    top: 0;
+    top: 6rem;
     z-index: 110;
     width: 100%;
     padding: 2.75rem 0;
     text-align: center;
+
+    @media ${Device.laptop} {
+        top: 0;
+    }
 `;
 
 type Props = {
@@ -65,27 +73,21 @@ const Button = styled.button<Props>`
     }
 `;
 
-const Rows = styled.div`
+const Rows = styled.section`
     position: relative;
-    width: 100%;
-    padding: 4.25rem 4.5rem;
+    padding: 1.25rem 5vw;
     display: grid;
     align-content: start;
-    grid-template-columns: 1fr;
+    justify-content: center;
     gap: 2rem;
 
     @media ${Device.laptop} {
-        grid-template-columns: 1fr 1fr;
-        padding: 4.25rem 7.5rem;
-    }
-
-    @media ${Device.desktop} {
-        padding: 4.25rem 9.5rem;
+        grid-template-columns: auto auto;
     }
 `;
 
 function App() {
-    const [favs, setFavs] = useState(false);
+    const [favView, setFavView] = useState(false);
     const [favorites, setFavorites] = useState(
         JSON.parse(
             localStorage.getItem("favorites") ||
@@ -93,7 +95,7 @@ function App() {
                     {
                         created_at: "",
                         author: "",
-                        objectID: 1,
+                        objectID: 0,
                         story_title: "",
                         story_url: "",
                     },
@@ -128,38 +130,69 @@ function App() {
         <>
             <GlobalStyle />
             <Main>
-                <Header>HACKER NEWS</Header>
-                <Views>
-                    <Button active={!favs} onClick={() => setFavs(false)}>
+                <Header>
+                    <h1>HACKER NEWS</h1>
+                </Header>
+                <Switcher>
+                    <Button
+                        type="button"
+                        active={!favView}
+                        onClick={() => setFavView(false)}
+                    >
                         All
                     </Button>
-                    <Button active={favs} onClick={() => setFavs(true)}>
+                    <Button
+                        type="button"
+                        active={favView}
+                        onClick={() => setFavView(true)}
+                    >
                         My faves
                     </Button>
-                </Views>
-                <Rows key={0}>
-                    {!favs ? (
-                        <All
+                </Switcher>
+                <Rows>
+                    {!favView ? (
+                        <Posts
                             favorites={favorites}
                             handleFavorite={handleFavorite}
                         />
                     ) : (
-                        favorites.map(
-                            (post: {
-                                created_at: string;
-                                author: string;
-                                objectID: number;
-                                story_title: string;
-                                story_url: string;
-                            }) => (
-                                <Row
-                                    key={post.objectID}
-                                    data={post}
-                                    favorite={true}
-                                    onClick={() => handleFavorite(post)}
-                                />
-                            )
-                        )
+                        <>
+                            {!favorites[0] ? (
+                                <div>No faves yet.</div>
+                            ) : (
+                                favorites
+                                    .sort(function (
+                                        a: {
+                                            created_at: string;
+                                        },
+                                        b: {
+                                            created_at: string;
+                                        }
+                                    ) {
+                                        return b.created_at.localeCompare(
+                                            a.created_at
+                                        );
+                                    })
+                                    .map(
+                                        (post: {
+                                            created_at: string;
+                                            author: string;
+                                            objectID: number;
+                                            story_title: string;
+                                            story_url: string;
+                                        }) => (
+                                            <Row
+                                                key={post.objectID}
+                                                data={post}
+                                                favorite={true}
+                                                onClick={() =>
+                                                    handleFavorite(post)
+                                                }
+                                            />
+                                        )
+                                    )
+                            )}
+                        </>
                     )}
                 </Rows>
             </Main>
