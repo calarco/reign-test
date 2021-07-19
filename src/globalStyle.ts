@@ -2,7 +2,6 @@ import { createGlobalStyle } from "styled-components";
 import { normalize } from "styled-normalize";
 
 export const Device = {
-    tablet: `(min-width: 768px)`,
     laptop: `(min-width: 1024px)`,
     desktop: `(min-width: 1440px)`,
 };
@@ -25,13 +24,7 @@ const GlobalStyle = createGlobalStyle`
 	    scroll-behavior: smooth;
     }
 
-    pre,
     p,
-    h6,
-    h5,
-    h4,
-    h3,
-    h2,
     h1,
     label {
         display: inline-block;
@@ -40,7 +33,6 @@ const GlobalStyle = createGlobalStyle`
     
     body {
         background: #fcfcfc;
-
         font-family: Roboto;
         font-size: 14px;
         line-height: 1.57;
@@ -62,6 +54,14 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 500;
     }
 
+    h1 {
+        font-family: Baskerville;
+        font-size: 28px;
+        font-weight: normal;
+        line-height: 1;
+        color: #3b3b3b;
+    }
+
     label {
         font-size: 11px;
         color: #767676;
@@ -74,6 +74,14 @@ const GlobalStyle = createGlobalStyle`
         border: solid 1px #2e2e2e;
         background-color: #ffffff;
         color: #343434;
+    }
+
+    select:hover {
+        cursor: pointer;
+    }
+
+    select:focus {
+        outline: none;
     }
 
     button {

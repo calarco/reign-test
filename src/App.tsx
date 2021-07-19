@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled, { css } from "styled-components";
 
 import GlobalStyle, { Device } from "./globalStyle";
 import Posts from "./Posts";
-import Row from "./Row";
 
 const Main = styled.main`
     width: 100vw;
@@ -26,11 +25,6 @@ const Header = styled.nav`
         text-align: left;
         width: 100%;
         max-width: 40rem;
-        font-family: Baskerville;
-        font-size: 28px;
-        font-weight: normal;
-        line-height: 1;
-        color: #3b3b3b;
 
         @media ${Device.laptop} {
             max-width: 72rem;
@@ -51,11 +45,11 @@ const Switcher = styled.div`
     }
 `;
 
-type Props = {
+type ButtonProps = {
     active?: boolean;
 };
 
-const Button = styled.button<Props>`
+const Button = styled.button<ButtonProps>`
     ${(props) =>
         props.active &&
         css`
@@ -73,58 +67,8 @@ const Button = styled.button<Props>`
     }
 `;
 
-const Rows = styled.section`
-    position: relative;
-    padding: 1.25rem 5vw;
-    display: grid;
-    align-content: start;
-    justify-content: center;
-    gap: 2rem;
-
-    @media ${Device.laptop} {
-        grid-template-columns: auto auto;
-    }
-`;
-
 function App() {
     const [favView, setFavView] = useState(false);
-    const [favorites, setFavorites] = useState(
-        JSON.parse(
-            localStorage.getItem("favorites") ||
-                JSON.stringify([
-                    {
-                        created_at: "",
-                        author: "",
-                        objectID: 0,
-                        story_title: "",
-                        story_url: "",
-                    },
-                ])
-        )
-    );
-
-    const handleFavorite = (post: {
-        created_at: string;
-        author: string;
-        objectID: number;
-        story_title: string;
-        story_url: string;
-    }) => {
-        favorites.some(
-            (item: { objectID: number }) => item.objectID === post.objectID
-        )
-            ? setFavorites(
-                  favorites.filter(
-                      (item: { objectID: number }) =>
-                          item.objectID !== post.objectID
-                  )
-              )
-            : setFavorites([...favorites, post]);
-    };
-
-    useEffect(() => {
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-    }, [favorites]);
 
     return (
         <>
@@ -149,52 +93,7 @@ function App() {
                         My faves
                     </Button>
                 </Switcher>
-                <Rows>
-                    {!favView ? (
-                        <Posts
-                            favorites={favorites}
-                            handleFavorite={handleFavorite}
-                        />
-                    ) : (
-                        <>
-                            {!favorites[0] ? (
-                                <div>No faves yet.</div>
-                            ) : (
-                                favorites
-                                    .sort(function (
-                                        a: {
-                                            created_at: string;
-                                        },
-                                        b: {
-                                            created_at: string;
-                                        }
-                                    ) {
-                                        return b.created_at.localeCompare(
-                                            a.created_at
-                                        );
-                                    })
-                                    .map(
-                                        (post: {
-                                            created_at: string;
-                                            author: string;
-                                            objectID: number;
-                                            story_title: string;
-                                            story_url: string;
-                                        }) => (
-                                            <Row
-                                                key={post.objectID}
-                                                data={post}
-                                                favorite={true}
-                                                onClick={() =>
-                                                    handleFavorite(post)
-                                                }
-                                            />
-                                        )
-                                    )
-                            )}
-                        </>
-                    )}
-                </Rows>
+                <Posts favView={favView} />
             </Main>
         </>
     );

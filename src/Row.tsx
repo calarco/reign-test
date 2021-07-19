@@ -19,7 +19,7 @@ const Container = styled.article`
 
     &:hover {
         cursor: pointer;
-        opacity: 0.8;
+        opacity: 0.7;
     }
 
     @media ${Device.laptop} {
@@ -72,10 +72,10 @@ type RowProps = {
         story_url: string;
     };
     favorite: boolean;
-    onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+    onFav: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-function Row({ ref, data, favorite, onClick }: RowProps) {
+function Row({ ref, data, favorite, onFav }: RowProps) {
     const units: { unit: Intl.RelativeTimeFormatUnit; ms: number }[] = [
         { unit: "year", ms: 31536000000 },
         { unit: "month", ms: 2628000000 },
@@ -124,7 +124,7 @@ function Row({ ref, data, favorite, onClick }: RowProps) {
                                 <b>{data.story_title}</b>
                             </p>
                         </Box>
-                        <Fav onClick={onClick}>
+                        <Fav onClick={onFav}>
                             <img
                                 src={
                                     favorite
