@@ -117,7 +117,7 @@ function Row({ ref, data, favorite, onFav }: RowProps) {
                                 <img src="img/iconmonstr-time-2.svg" alt="" />
                                 {relativeTimeFromDates(
                                     new Date(data.created_at)
-                                )}{" "}
+                                )}
                                 by {data.author}
                             </label>
                             <p>

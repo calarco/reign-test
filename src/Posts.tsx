@@ -231,9 +231,7 @@ function Posts({ favView }: PostsProps) {
                 </>
             ) : (
                 <>
-                    {!favorites[0] ? (
-                        <div>No faves yet.</div>
-                    ) : (
+                    {favorites[0] ? (
                         favorites
                             .sort(function (
                                 a: {
@@ -261,6 +259,8 @@ function Posts({ favView }: PostsProps) {
                                     />
                                 )
                             )
+                    ) : (
+                        <div>No faves yet.</div>
                     )}
                 </>
             )}
